@@ -1,5 +1,3 @@
-using Domain.Users;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -13,11 +11,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-string connString = builder.Configuration.GetConnectionString("RayanboursConnection");
-builder.Services.AddDbContext<RayanbourseDbContext>(item => item.UseSqlServer(connString));
-builder.Services.AddDbContext<RayanbourseDbContext>();
-builder.Services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<RayanbourseDbContext>().AddDefaultTokenProviders();
+builder.Services.ConfigurePersistenceServices(builder.Configuration);
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
