@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Rayanbourse.Api.Controllers.Base
@@ -7,5 +8,10 @@ namespace Rayanbourse.Api.Controllers.Base
     [ApiController]
     public class BaseController : ControllerBase
     {
+        protected IMediator Mediator;
+        public BaseController(IMediator mediator)
+        {
+            Mediator = mediator;
+        }
     }
 }

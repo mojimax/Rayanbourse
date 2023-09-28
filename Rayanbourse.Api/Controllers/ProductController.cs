@@ -1,6 +1,9 @@
 ﻿using Application.Contracts.Services.Poducts;
 using Application.Dtos.Products;
+using Application.Features.Products.Requests.Commands;
+using Application.Features.Products.Requests.Queries;
 using Application.Response;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,36 +16,33 @@ namespace Rayanbourse.Api.Controllers
     [ApiController]
     public class ProductController : BaseController
     {
-        private readonly IProductService _productService;
-        public ProductController(IProductService productService)
+        public ProductController(IMediator mediator) : base(mediator)
         {
-            _productService = productService;
         }
+
         [HttpPost("AddProduct")]
         [Authorize]
         public async Task<OperationResult<bool>> AddProduct(CreateProductDto createProductDto, CancellationToken cancellationToken)
         {
-            return await _productService.Add(createProductDto, cancellationToken);
+            return await Mediator.Send(new CreateProductCommand() { CreateProduct = createProductDto }, cancellationToken);
+
         }
         [HttpPut("UpdateProduct")]
         [Authorize]
         public async Task<OperationResult<bool>> UpdateProduct(UpdateProductDto updateProduct, CancellationToken cancellationToken)
         {
-            return await _productService.Update(updateProduct, cancellationToken);
-
+            return await Mediator.Send(new UpdateProductCommand() { UpdateProduct = updateProduct }, cancellationToken);
         }
         [HttpDelete("DeleteProduct")]
         [Authorize]
         public async Task<OperationResult<bool>> DeleteProduct(DeleteProductDto deleteProduct, CancellationToken cancellationToken)
         {
-            return await _productService.Delete(deleteProduct, cancellationToken);
-
+            return await Mediator.Send(new DeleteProductCommand() { DeleteProduct = deleteProduct }, cancellationToken);
         }
         [HttpGet("GetAll")]
         public async Task<List<ProductDto>> GetAll([FromQuery] Guid? id, CancellationToken cancellationToken)
         {
-            var result = await _productService.GetAllbyCreatorId(id, cancellationToken);
-            return result.ToList();
+            return await Mediator.Send(new GetAllProductByCreatorQuery() { CreatorId = id });
         }
     }
 }

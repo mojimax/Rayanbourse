@@ -10,6 +10,7 @@ using Application.Services.Products;
 using Application.Services.Users;
 using AutoMapper;
 using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -26,6 +27,7 @@ namespace Application
             });
             var autoMapper = automapperConfig.CreateMapper();
             services.AddSingleton(autoMapper);
+            services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUserSerive, UserService>();
