@@ -103,11 +103,12 @@ namespace Persistence.Repositories.Base
             }
         }
 
-        public async Task<bool> IsExistValueAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
+        public async Task<bool> IsExistValueAsync(Expression<Func<TEntity, bool>> expression, bool ignoreFilter = false, CancellationToken cancellationToken = default)
         {
             try
             {
-                return await TableNoTracking.AnyAsync(expression, cancellationToken);
+                IQueryable<TEntity> _result = ignoreFilter == true ? TableNoTracking.IgnoreQueryFilters() : TableNoTracking;
+                return await _result.AnyAsync(expression, cancellationToken);
             }
             catch (Exception)
             {

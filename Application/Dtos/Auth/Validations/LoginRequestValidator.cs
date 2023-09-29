@@ -10,6 +10,7 @@ namespace Application.Dtos.Auth.Validations
         public LoginRequestValidator(IUserSerive userSerive)
         {
             _userSerive = userSerive;
+            CascadeMode = CascadeMode.Stop;
             Include(new IBaseAuthDtoValidator());
             RuleFor(x => x.Email)
                 .MustAsync(async (email, cancellation) =>

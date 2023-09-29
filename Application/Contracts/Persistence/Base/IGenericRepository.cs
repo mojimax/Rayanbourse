@@ -17,6 +17,6 @@ namespace Application.Contracts.Persistence.Base
         Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
         Task<TEntity> FindModelAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
-        Task<bool> IsExistValueAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
+        Task<bool> IsExistValueAsync(Expression<Func<TEntity, bool>> expression, bool ignoreFilter = false, CancellationToken cancellationToken = default);
     }
 }

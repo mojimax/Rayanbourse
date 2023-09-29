@@ -30,7 +30,9 @@ namespace Application.Dtos.Products.Validations
         }
         protected async Task<bool> CheckUserId(string CurrentUserId)
         {
-            var userId = CurrentUserId ?? _httpContextAccessor.HttpContext!.User.FindFirstValue(JwtRegisteredClaimNames.Sid);
+            Guid guidOutput;
+            bool isValid = Guid.TryParse(CurrentUserId, out guidOutput);
+            string userId = guidOutput != Guid.Empty ? guidOutput.ToString() : _httpContextAccessor.HttpContext!.User.FindFirstValue(JwtRegisteredClaimNames.Sid);
             if (!string.IsNullOrEmpty(userId))
             {
                 return await _productRepository.IsExistValueAsync(x => x.CreateById.Equals(userId));
@@ -39,7 +41,7 @@ namespace Application.Dtos.Products.Validations
         }
         protected async Task<bool> CheckId(Guid id)
         {
-            return await _productRepository.IsExistValueAsync(x => x.Id == id);
+            return await _productRepository.IsExistValueAsync(x => x.Id == id && !x.Deleted, ignoreFilter: true);
         }
     }
 }

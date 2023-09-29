@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Persistence.Repositories.Base;
 using Persistence.Repositories.Products;
@@ -21,8 +22,16 @@ namespace Persistence
         {
             string connString = configuration.GetConnectionString("RayanboursConnection");
             services.AddDbContext<RayanbourseDbContext>(item => item.UseSqlServer(connString));
-            services.AddIdentity<User, IdentityRole>()
-                            .AddEntityFrameworkStores<RayanbourseDbContext>().AddDefaultTokenProviders();
+            services.AddIdentity<User, IdentityRole>(o =>
+           {
+               o.Password.RequireDigit = false;
+               o.Password.RequiredLength = 8;
+               o.Password.RequireUppercase = false;
+               o.Password.RequireLowercase = false;
+               o.Password.RequireNonAlphanumeric = false;
+           }
+
+            ).AddEntityFrameworkStores<RayanbourseDbContext>().AddDefaultTokenProviders();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IProductRepository, ProductRepository>();
 

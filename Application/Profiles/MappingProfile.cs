@@ -25,7 +25,8 @@ namespace Application.Profiles
                      (src, dst, _, context) => context.Items["token"]));
             CreateMap<CreateProductDto, Product>()
             .ForMember(x => x.CreateById, opt => opt.MapFrom(scr => _httpContextAccessor.HttpContext!.User.FindFirstValue(JwtRegisteredClaimNames.Sid)))
-            .ForMember(x => x.Id, opt => opt.MapFrom(scr => Guid.NewGuid()));
+            .ForMember(x => x.Id, opt => opt.MapFrom(scr => Guid.NewGuid()))
+            .ForMember(x => x.IsAvailable, opt => opt.MapFrom(scr => true));
 
             CreateMap<UpdateProductDto, Product>()
             .ForMember(x => x.CreateById, opt => opt.MapFrom(scr => _httpContextAccessor.HttpContext!.User.FindFirstValue(JwtRegisteredClaimNames.Sid)));
