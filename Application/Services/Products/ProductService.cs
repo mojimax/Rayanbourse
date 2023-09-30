@@ -33,8 +33,8 @@ namespace Application.Services.Products
             {
                 var result = await _productRepository.GetAllAsync(x =>
                 x.IsAvailable
-                && (creatorId != null && x.CreateById == creatorId.ToString())
-                || (creatorId == null) && true,cancellationToken);
+                && creatorId != null && x.CreateById == creatorId.ToString()
+                || creatorId == null, cancellationToken);
                 return _mapper.Map<List<ProductDto>>(result);
             }
             catch (Exception)
